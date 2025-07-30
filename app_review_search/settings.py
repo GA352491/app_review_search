@@ -191,13 +191,3 @@ SPECTACULAR_SETTINGS = {
     #     }
     # ]
 }
-import warnings
-
-# ... (other existing settings) ...
-
-# --- Suppress the specific RuntimeWarning about database access in AppConfig.ready() ---
-warnings.filterwarnings(
-    "ignore",
-    message="Accessing the database during app initialization is discouraged.",
-    category=RuntimeWarning
-)
