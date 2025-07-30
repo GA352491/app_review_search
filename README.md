@@ -11,18 +11,14 @@ A second user(i.e. supervisor) should be able to login and see all the reviews f
  
 Please find attached a dataset downloaded from Kaggle that has details from the google play store apps.
  
-Here is the content for your `README.md` file, provided directly in Markdown format.
 
-**To use this, simply copy all the text *inside* the code block below (starting from `# App Review Search Application (Backend)` and ending with `* ideally, an external search service.`) and paste it into a new file named `README.md` on your local machine.**
-
-````markdown
 # App Review Search Application (Backend)
 
 This is the backend component of a full-stack web application that allows users to search for mobile applications, view their details, submit reviews, and provides a supervisor dashboard for review moderation. The search functionality leverages a hybrid approach combining exact matching, TF-IDF (Term Frequency-Inverse Document Frequency) for semantic similarity, and substring matching for robustness.
 
 ## Features
 
-* **User Authentication:** Register, Login, Logout (API endpoints).
+User Authentication:** Register, Login, Logout ( endpoints).
 * **App Search API:**
     * Search apps by name.
     * Hybrid search algorithm:
@@ -78,7 +74,7 @@ cd <your-repository-name> # e.g., cd app_review_search
 Navigate into the Django project directory (where `manage.py` is located):
 
 ```bash
-cd app_review_project # Or whatever your Django project folder is named
+cd app_review_search # Or whatever your Django project folder is named
 ```
 
 #### a. Create and Activate Virtual Environment
@@ -139,7 +135,7 @@ python manage.py initialize_tfidf
 1.  Ensure your **Django backend** is running in one terminal:
 
     ```bash
-    cd app_review_project
+    cd app_review_search
     source .venv/bin/activate
     python manage.py runserver
     ```
@@ -187,19 +183,4 @@ The search functionality is a core part of the application, designed for both re
 1.  **User Submits Review:** An authenticated user submits a review for an app. The `is_approved` field for this new review is set to `False`.
 2.  **Supervisor Dashboard:** Staff or superuser accounts can log in and access the supervisor dashboard (via API or traditional view). This fetches only reviews where `is_approved` is `False`.
 3.  **Approve/Reject:** From the dashboard, supervisors can choose to "Approve" a review (setting `is_approved` to `True`) or "Reject" it (deleting the review).
-
-## Important Considerations and Limitations
-
-  * **TF-IDF Scalability (for "Huge Datasets"):**
-      * While the current TF-IDF implementation works for small to medium datasets and persists the model to disk, it is **not suitable for truly "huge datasets"** (millions or billions of apps/documents).
-      * **Limitations:**
-          * **Memory Consumption:** The `tfidf_matrix` can still consume significant RAM when loaded, even if it's sparse.
-          * **Initialization Time:** Loading and unpickling large models from disk during server startup can still be slow.
-          * **Data Staleness:** The TF-IDF model is static once loaded. If new apps are added to the database, you **must manually re-run `python manage.py initialize_tfidf` and restart your server** to update the search index. This is not real-time.
-  * **Production Search Solution:** For a production environment with a large, dynamic dataset and real-time search requirements, a dedicated, distributed search engine like **Elasticsearch** (or Apache Solr) would be the recommended solution. These systems are built for:
-      * Scalability across multiple servers.
-      * Near real-time indexing of new data.
-      * Advanced features like fuzzy matching, synonyms, and aggregations.
-      * Decoupling search functionality from the main application server.
-
-    
+  
