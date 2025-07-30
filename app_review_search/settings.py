@@ -35,12 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    # 'core',
     'rest_framework',  # ADD THIS
     'rest_framework.authtoken',  # ADD THIS for token authentication
     'corsheaders',  # ADD THIS
     'drf_spectacular',
     'django_extensions',  # ADD THIS LINE
+    'core.apps.CoreConfig',  # <--- CRITICAL: Use this line ONLY for your 'core' app
 
 ]
 
@@ -190,3 +191,13 @@ SPECTACULAR_SETTINGS = {
     #     }
     # ]
 }
+import warnings
+
+# ... (other existing settings) ...
+
+# --- Suppress the specific RuntimeWarning about database access in AppConfig.ready() ---
+warnings.filterwarnings(
+    "ignore",
+    message="Accessing the database during app initialization is discouraged.",
+    category=RuntimeWarning
+)
