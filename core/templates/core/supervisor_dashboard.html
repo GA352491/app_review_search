@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Supervisor Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Reviews Pending Approval</h2>
+
+    {% if pending_reviews %}
+        {% for review in pending_reviews %}
+            <div class="review-card">
+                <p><strong>App:</strong> <a href="{% url 'app_detail' review.app.id %}">{{ review.app.name }}</a></p>
+                <p><strong>Reviewer:</strong> {{ review.user.username|default:"N/A" }}</p>
+                {% if review.rating %}
+                    <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                {% endif %}
+                {% if review.review_title %}
+                    <p><strong>Title:</strong> {{ review.review_title }}</p>
+                {% endif %}
+                <p><strong>Review:</strong> {{ review.translated_review|default:"No review text provided." }}</p>
+                <p><strong>Submitted:</strong> {{ review.created_at|date:"M d, Y H:i" }}</p>
+
+                <form action="{% url 'approve_reject_review' review.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="approve" class="search-button" style="background-color: #28a745;">Approve</button>
+                </form>
+                <form action="{% url 'approve_reject_review' review.id %}" method="post" style="display: inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="reject" class="search-button" style="background-color: #dc3545;">Reject</button>
+                </form>
+            </div>
+        {% endfor %}
+
+        {# Pagination Controls START #}
+        {% if is_paginated %}
+            <div class="pagination" style="margin-top: 20px; text-align: center;">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="search-button" style="padding: 8px 15px; margin-right: 5px;">Previous</a>
+                    {% endif %}
+                    <span class="current-page" style="font-weight: bold; margin: 0 10px;">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="search-button" style="padding: 8px 15px; margin-left: 5px;">Next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        {# Pagination Controls END #}
+
+    {% else %}
+        <p>No reviews currently pending approval.</p>
+    {% endif %}
+{% endblock %}

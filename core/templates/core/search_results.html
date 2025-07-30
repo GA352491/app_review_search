@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Search Results for "{{ query }}"{% endblock %}
+
+{% block content %}
+    <div class="search-results-container">
+        <h2>Search Results for "{{ query }}"</h2>
+
+        {% if results %} {# 'results' is the context_object_name from ListView #}
+            {% for app in results %}
+                <div class="app-card">
+                    <h3><a href="{% url 'app_detail' app.id %}">{{ app.name }}</a></h3>
+                    <p><strong>Category:</strong> {{ app.category }}</p>
+                    <p><strong>Rating:</strong> {{ app.rating }} ({{ app.reviews.count }} reviews)</p>
+                    <p><strong>Installs:</strong> {{ app.installs|floatformat:"0" }}</p> {# Format installs nicely #}
+                    {% if app.price %}
+                        <p><strong>Price:</strong> ${{ app.price }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {# Pagination Controls START #}
+            {% if is_paginated %}
+                <div class="pagination" style="margin-top: 20px; text-align: center;">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}" class="search-button" style="padding: 8px 15px; margin-right: 5px;color: white">Previous</a>
+                        {% endif %}
+                        <span class="current-page" style="font-weight: bold; margin: 0 10px;">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}" class="search-button" style="padding: 8px 15px; margin-left: 5px;color: white">Next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            {% endif %}
+            {# Pagination Controls END #}
+
+        {% else %}
+            <p>No results found for "{{ query }}".</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ app.name }} - App Details{% endblock %}
+
+{% block content %}
+    <h2>{{ app.name }}</h2>
+    <p><strong>Category:</strong> {{ app.category }}</p>
+    <p><strong>Rating:</strong> {{ app.rating|default:"N/A" }}</p>
+    <p><strong>Reviews Count:</strong> {{ app.reviews_count }}</p>
+    <p><strong>Size:</strong> {{ app.size }}</p>
+    <p><strong>Installs:</strong> {{ app.installs }}+</p>
+    <p><strong>Type:</strong> {{ app.type }}</p>
+    <p><strong>Price:</strong> {{ app.price }}</p>
+    <p><strong>Content Rating:</strong> {{ app.content_rating }}</p>
+    <p><strong>Genres:</strong> {{ app.genres }}</p>
+    <p><strong>Last Updated:</strong> {{ app.last_updated }}</p>
+    <p><strong>Current Version:</strong> {{ app.current_ver }}</p>
+    <p><strong>Android Version:</strong> {{ app.android_ver }}</p>
+
+    <h3>User Reviews</h3>
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'submit_review' app.id %}">Write a new review for this app</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to write a review.</p>
+    {% endif %}
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review-card">
+                <p><strong>Reviewer:</strong> {{ review.user.username|default:"Anonymous" }}</p>
+                {% if review.rating %}
+                    <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                {% endif %}
+                {% if review.review_title %}
+                    <p><strong>Title:</strong> {{ review.review_title }}</p>
+                {% endif %}
+                <p>{{ review.translated_review|default:"No review text provided." }}</p>
+                {% if not review.is_approved %}
+                    <span class="pending-review">Pending Approval</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-reviews">No reviews available for this app yet.</p>
+    {% endif %}
+{% endblock %}

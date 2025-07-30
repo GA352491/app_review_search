@@ -1,0 +1,593 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>{% block title %}App Review Search{% endblock %}</title>#}
+{#    <style>#}
+{#        body {#}
+{#            font-family: Arial, sans-serif;#}
+{#            margin: 0;#}
+{#            padding: 0;#}
+{#            background-color: #f4f4f4;#}
+{#            color: #333;#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            width: 80%;#}
+{#            margin: 20px auto;#}
+{#            background-color: #fff;#}
+{#            padding: 20px;#}
+{#            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{##}
+{#        header {#}
+{#            background-color: #333;#}
+{#            color: #fff;#}
+{#            padding: 10px 20px;#}
+{#            text-align: center;#}
+{#        }#}
+{##}
+{#        nav {#}
+{#            float: right;#}
+{#        }#}
+{##}
+{#        nav a {#}
+{#            color: #fff;#}
+{#            text-decoration: none;#}
+{#            margin-left: 15px;#}
+{#        }#}
+{##}
+{#        h1, h2 {#}
+{#            color: #0056b3;#}
+{#        }#}
+{##}
+{#        .search-container {#}
+{#            text-align: center;#}
+{#            margin-bottom: 20px;#}
+{#            position: relative;#}
+{#        }#}
+{##}
+{#        .search-input {#}
+{#            width: 60%;#}
+{#            padding: 10px;#}
+{#            border: 1px solid #ddd;#}
+{#            border-radius: 5px;#}
+{#            font-size: 16px;#}
+{#        }#}
+{##}
+{#        .search-button {#}
+{#            padding: 10px 20px;#}
+{#            background-color: #007bff;#}
+{#            color: white;#}
+{#            border: none;#}
+{#            border-radius: 5px;#}
+{#            cursor: pointer;#}
+{#            font-size: 16px;#}
+{#        }#}
+{##}
+{#        .search-button:hover {#}
+{#            background-color: #0056b3;#}
+{#        }#}
+{##}
+{#        .suggestions {#}
+{#            position: absolute;#}
+{#            width: 60%;#}
+{#            left: 20%; /* Adjust to align with search input */#}
+{#            background-color: white;#}
+{#            border: 1px solid #ddd;#}
+{#            border-top: none;#}
+{#            max-height: 200px;#}
+{#            overflow-y: auto;#}
+{#            z-index: 1000;#}
+{#            list-style: none;#}
+{#            padding: 0;#}
+{#            margin: 0;#}
+{#            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{##}
+{#        .suggestions li {#}
+{#            padding: 10px;#}
+{#            cursor: pointer;#}
+{#            border-bottom: 1px solid #eee;#}
+{#        }#}
+{##}
+{#        .suggestions li:last-child {#}
+{#            border-bottom: none;#}
+{#        }#}
+{##}
+{#        .suggestions li:hover {#}
+{#            background-color: #f0f0f0;#}
+{#        }#}
+{##}
+{#        .app-card {#}
+{#            border: 1px solid #eee;#}
+{#            margin-bottom: 10px;#}
+{#            padding: 15px;#}
+{#            border-radius: 8px;#}
+{#            background-color: #f9f9f9;#}
+{#        }#}
+{##}
+{#        .app-card h3 a {#}
+{#            color: #007bff;#}
+{#            text-decoration: none;#}
+{#        }#}
+{##}
+{#        .app-card h3 a:hover {#}
+{#            text-decoration: underline;#}
+{#        }#}
+{##}
+{#        .review-card {#}
+{#            border: 1px solid #ddd;#}
+{#            margin-bottom: 10px;#}
+{#            padding: 10px;#}
+{#            background-color: #fff;#}
+{#            border-radius: 5px;#}
+{#        }#}
+{##}
+{#        .review-card p {#}
+{#            margin: 5px 0;#}
+{#        }#}
+{##}
+{#        .review-form {#}
+{#            margin-top: 20px;#}
+{#            padding: 15px;#}
+{#            border: 1px solid #eee;#}
+{#            background-color: #f9f9f9;#}
+{#            border-radius: 8px;#}
+{#        }#}
+{##}
+{#        .review-form label {#}
+{#            display: block;#}
+{#            margin-bottom: 5px;#}
+{#            font-weight: bold;#}
+{#        }#}
+{##}
+{#        .review-form input[type="text"],#}
+{#        .review-form textarea,#}
+{#        .review-form select {#}
+{#            width: calc(100% - 22px);#}
+{#            padding: 10px;#}
+{#            margin-bottom: 10px;#}
+{#            border: 1px solid #ddd;#}
+{#            border-radius: 4px;#}
+{#        }#}
+{##}
+{#        .review-form button {#}
+{#            background-color: #28a745;#}
+{#            color: white;#}
+{#            padding: 10px 15px;#}
+{#            border: none;#}
+{#            border-radius: 5px;#}
+{#            cursor: pointer;#}
+{#        }#}
+{##}
+{#        .review-form button:hover {#}
+{#            background-color: #218838;#}
+{#        }#}
+{##}
+{#        .message {#}
+{#            padding: 10px;#}
+{#            margin-bottom: 10px;#}
+{#            border-radius: 5px;#}
+{#        }#}
+{##}
+{#        .message.success {#}
+{#            background-color: #d4edda;#}
+{#            color: #155724;#}
+{#            border: 1px solid #c3e6cb;#}
+{#        }#}
+{##}
+{#        .message.error {#}
+{#            background-color: #f8d7da;#}
+{#            color: #721c24;#}
+{#            border: 1px solid #f5c6cb;#}
+{#        }#}
+{##}
+{#        .login-form {#}
+{#            margin-top: 20px;#}
+{#            padding: 20px;#}
+{#            border: 1px solid #eee;#}
+{#            background-color: #f9f9f9;#}
+{#            border-radius: 8px;#}
+{#            width: 300px;#}
+{#            margin-left: auto;#}
+{#            margin-right: auto;#}
+{#        }#}
+{##}
+{#        .login-form input[type="text"], .login-form input[type="password"] {#}
+{#            width: calc(100% - 22px);#}
+{#            padding: 10px;#}
+{#            margin-bottom: 15px;#}
+{#            border: 1px solid #ddd;#}
+{#            border-radius: 4px;#}
+{#        }#}
+{##}
+{#        .login-form button {#}
+{#            width: 100%;#}
+{#            padding: 10px;#}
+{#            background-color: #007bff;#}
+{#            color: white;#}
+{#            border: none;#}
+{#            border-radius: 5px;#}
+{#            cursor: pointer;#}
+{#        }#}
+{##}
+{#        .login-form button:hover {#}
+{#            background-color: #0056b3;#}
+{#        }#}
+{##}
+{#        .no-reviews {#}
+{#            text-align: center;#}
+{#            color: #666;#}
+{#            font-style: italic;#}
+{#            margin-top: 20px;#}
+{#        }#}
+{##}
+{#        .pending-review {#}
+{#            background-color: #fff3cd;#}
+{#            border-color: #ffeeba;#}
+{#            color: #856404;#}
+{#            padding: 8px;#}
+{#            border-radius: 4px;#}
+{#            font-size: 0.9em;#}
+{#            margin-top: 5px;#}
+{#        }#}
+{##}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{#<header>#}
+{#    <h1><a href="{% url 'home' %}" style="color: white; text-decoration: none;">App Review Search</a></h1>#}
+{#    <nav>#}
+{#        {% if user.is_authenticated %}#}
+{#            <span>Hello, {{ user.username }}!</span>#}
+{#            <a href="{% url 'logout' %}">Logout</a>#}
+{#            {% if user.is_staff %} {# Or specific group/permission check for supervisor #}
+{#                <a href="{% url 'supervisor_dashboard' %}">Supervisor Dashboard</a>#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#            <a href="{% url 'login' %}">Login</a>#}
+{#            <a href="{% url 'register' %}">Register</a>#}
+{#        {% endif %}#}
+{#    </nav>#}
+{#    <nav>#}
+{#        {% if user.is_authenticated %}#}
+{#            <span>Hello, {{ user.username }}!</span>#}
+            {# Replace the simple <a> tag with this form #}
+{#            <form action="{% url 'logout' %}" method="post" style="display: inline;">#}
+{#                {% csrf_token %}#}
+{#                <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>#}
+{#            </form>#}
+{#            {% if user.is_staff %}#}
+{#                <a href="{% url 'supervisor_dashboard' %}">Supervisor Dashboard</a>#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#            <a href="{% url 'login' %}">Login</a>#}
+{#            <a href="{% url 'register' %}">Register</a>#}
+{#        {% endif %}#}
+{#    </nav>#}
+{#    <div style="clear: both;"></div>#}
+{#</header>#}
+{##}
+{#<div class="container">#}
+{#    {% if messages %}#}
+{#        <ul class="messages">#}
+{#            {% for message in messages %}#}
+{#                <li {% if message.tags %} class="{{ message.tags }} message" {% endif %}>{{ message }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    {% endif %}#}
+{#    {% block content %}{% endblock %}#}
+{#</div>#}
+{##}
+{##}
+{#<script>#}
+{#    document.addEventListener('DOMContentLoaded', function () {#}
+{#        const searchInput = document.getElementById('searchInput');#}
+{#        const suggestionsList = document.getElementById('suggestionsList');#}
+{##}
+{#        if (searchInput && suggestionsList) { // Ensure elements are found#}
+{#            let currentFocus = -1; // For keyboard navigation (optional, but good to have)#}
+{##}
+{#            searchInput.addEventListener('input', debounce(function () {#}
+{#                const query = this.value;#}
+{#                if (query.length >= 3) { // Only fetch if 3 or more characters#}
+{#                    fetch(`/search_suggestions/?q=${encodeURIComponent(query)}`)#}
+{#                        .then(response => {#}
+{#                            if (!response.ok) { // Check for HTTP errors (e.g., 404, 500)#}
+{#                                console.error('Network response was not ok', response.statusText);#}
+{#                                return {}; // Return empty object to prevent further errors#}
+{#                            }#}
+{#                            return response.json();#}
+{#                        })#}
+{#                        .then(data => {#}
+{#                            suggestionsList.innerHTML = ''; // Clear previous suggestions#}
+{#                            if (data.suggestions && data.suggestions.length > 0) {#}
+{#                                data.suggestions.forEach(suggestion => {#}
+{#                                    const li = document.createElement('li');#}
+{#                                    li.textContent = suggestion;#}
+{#                                    li.addEventListener('click', () => {#}
+{#                                        searchInput.value = suggestion;#}
+{#                                        suggestionsList.innerHTML = ''; // Clear suggestions#}
+{#                                        suggestionsList.style.display = 'none'; // Hide suggestions#}
+{#                                        document.getElementById('searchForm').submit(); // Submit the form#}
+{#                                    });#}
+{#                                    suggestionsList.appendChild(li);#}
+{#                                });#}
+{#                                suggestionsList.style.display = 'block'; // Show the list#}
+{#                            } else {#}
+{#                                suggestionsList.style.display = 'none'; // Hide if no suggestions#}
+{#                            }#}
+{#                        })#}
+{#                        .catch(error => console.error('Error fetching suggestions:', error)); // Catch network/parsing errors#}
+{#                } else {#}
+{#                    suggestionsList.innerHTML = '';#}
+{#                    suggestionsList.style.display = 'none';#}
+{#                }#}
+{#            }, 300)); // Debounce for 300ms#}
+{##}
+{#            // Keyboard navigation logic (ArrowUp, ArrowDown, Enter)#}
+{#            searchInput.addEventListener('keydown', function (e) {#}
+{#                let items = suggestionsList.getElementsByTagName('li');#}
+{#                if (items.length === 0) return;#}
+{##}
+{#                if (e.key === 'ArrowDown') {#}
+{#                    currentFocus++;#}
+{#                    addActive(items);#}
+{#                } else if (e.key === 'ArrowUp') {#}
+{#                    currentFocus--;#}
+{#                    addActive(items);#}
+{#                } else if (e.key === 'Enter') {#}
+{#                    e.preventDefault(); // Prevent default form submission#}
+{#                    if (currentFocus > -1) {#}
+{#                        if (items[currentFocus]) {#}
+{#                            items[currentFocus].click();#}
+{#                        }#}
+{#                    } else {#}
+{#                        document.getElementById('searchForm').submit();#}
+{#                    }#}
+{#                }#}
+{#            });#}
+{##}
+{#            function addActive(items) {#}
+{#                removeActive(items);#}
+{#                if (currentFocus >= items.length) currentFocus = 0;#}
+{#                if (currentFocus < 0) currentFocus = (items.length - 1);#}
+{#                items[currentFocus].classList.add('active');#}
+{#                // Optional: scroll to active element#}
+{#                if (items[currentFocus]) {#}
+{#                    items[currentFocus].scrollIntoView({block: 'nearest'});#}
+{#                }#}
+{#            }#}
+{##}
+{#            function removeActive(items) {#}
+{#                for (let i = 0; i < items.length; i++) {#}
+{#                    items[i].classList.remove('active');#}
+{#                }#}
+{#            }#}
+{##}
+{#            // Hide suggestions when clicking outside#}
+{#            document.addEventListener('click', function (e) {#}
+{#                if (e.target !== searchInput && e.target !== suggestionsList && !suggestionsList.contains(e.target)) {#}
+{#                    suggestionsList.style.display = 'none';#}
+{#                }#}
+{#            });#}
+{#        }#}
+{##}
+{#        // Debounce function#}
+{#        function debounce(func, delay) {#}
+{#            let timeout;#}
+{#            return function (...args) {#}
+{#                const context = this;#}
+{#                clearTimeout(timeout);#}
+{#                timeout = setTimeout(() => func.apply(context, args), delay);#}
+{#            };#}
+{#        }#}
+{#    });#}
+{#</script>#}
+{#</body>#}
+{#</html>#}
+{##}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}App Review Search{% endblock %}</title>
+    <style>
+        /* Basic CSS for the layout and search bar */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
+        .header { background-color: #333; color: white; padding: 15px 20px; text-align: center; }
+        .header h1 { margin: 0; }
+        .header .user-info { float: right; font-size: 0.9em; }
+        .container { max-width: 960px; margin: 20px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .search-form { display: flex; justify-content: center; margin-bottom: 20px; }
+        .search-input { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 4px 0 0 4px; font-size: 1em; }
+        .search-button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1em; }
+        .search-button:hover { background-color: #0056b3; }
+        .messages { list-style: none; padding: 0; margin: 10px 0; }
+        .messages li { padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .messages .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .app-card, .review-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .app-card h3, .review-card h4 { margin-top: 0; color: #007bff; }
+        .app-card a, .review-card a { text-decoration: none; color: #007bff; }
+        .app-card a:hover, .review-card a:hover { text-decoration: underline; }
+        .button-link { display: inline-block; padding: 8px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+        .button-link:hover { background-color: #218838; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="email"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Ensures padding doesn't increase total width */
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .submit-button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+        .submit-button:hover { background-color: #0056b3; }
+        .delete-button { background-color: #dc3545; }
+        .delete-button:hover { background-color: #c82333; }
+        .pagination { margin-top: 20px; text-align: center; }
+        .page-links a, .current-page {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .current-page {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .page-links a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Suggestions specific styles */
+        #suggestions-list {
+            position: absolute; /* Needs to be absolute to overlay content */
+            width: calc(70% - 2px); /* Match search input width minus borders */
+            max-height: 200px; /* Limit height for scroll */
+            overflow-y: auto; /* Enable scroll if too many suggestions */
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none; /* No top border to visually connect to input */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 1000; /* Ensure it appears above other content */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #suggestions-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee; /* Separator between items */
+        }
+        #suggestions-list li:last-child {
+            border-bottom: none; /* No border for the last item */
+        }
+        #suggestions-list li:hover {
+            background-color: #f0f0f0; /* Highlight on hover */
+        }
+        .logout-button {
+            background: none;
+            border: none;
+            color: white; /* Or whatever color your links are */
+            cursor: pointer;
+            text-decoration: none; /* Remove underline by default */
+            padding: 0; /* Remove default button padding */
+            font-size: inherit; /* Inherit font size from parent */
+            font-family: inherit; /* Inherit font family */
+            @apply hover:text-blue-300 transition duration-200; /* Apply Tailwind hover styles */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="{% url 'home' %}" style="color: white; text-decoration: none;">App Review Search</a></h1>
+        <div class="user-info">
+            {% if user.is_authenticated %}
+                Hello, {{ user.username }}! |
+                {# CRITICAL CHANGE: Use a form for POST logout #}
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %} {# Django's CSRF token for POST forms #}
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'register' %}" style="color: white; margin-right: 10px;">Register</a> | <a href="{% url 'login' %}" style="color: white;">Login</a>
+            {% endif %}
+            {% if user.is_authenticated and user.is_staff %}
+                | <a href="{% url 'supervisor_dashboard' %}" style="color: white;">Supervisor Dashboard</a>
+            {% endif %}
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form action="{% url 'search_apps' %}" method="get" class="search-form">
+            <input type="text" name="q" id="search-input" class="search-input" placeholder="Search for an App" value="{{ query|default:'' }}">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+        <ul id="suggestions-list" style="display: none;"></ul>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const suggestionsList = document.getElementById('suggestions-list');
+        let currentTimeout = null;
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+
+            // Clear any existing timeout
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
+            }
+
+            if (query.length >= 3) {
+                // Set a new timeout to wait for 300ms after the last input
+                currentTimeout = setTimeout(() => {
+                    fetch(`/search_suggestions/?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsList.innerHTML = ''; // Clear previous suggestions
+                            if (data.suggestions && data.suggestions.length > 0) {
+                                data.suggestions.forEach(suggestion => {
+                                    const li = document.createElement('li');
+                                    li.textContent = suggestion;
+                                    li.addEventListener('click', function() {
+                                        searchInput.value = suggestion; // Set input value to clicked suggestion
+                                        suggestionsList.style.display = 'none'; // Hide suggestions
+                                        // Optionally, submit the form immediately or let user click search
+                                        searchInput.closest('form').submit();
+                                    });
+                                    suggestionsList.appendChild(li);
+                                });
+                                suggestionsList.style.display = 'block'; // Show the list
+                            } else {
+                                suggestionsList.style.display = 'none'; // Hide if no suggestions
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching suggestions:', error);
+                            suggestionsList.style.display = 'none';
+                        });
+                }, 300); // 300ms debounce time
+            } else {
+                suggestionsList.innerHTML = '';
+                suggestionsList.style.display = 'none'; // Hide if query is too short
+            }
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+                suggestionsList.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
